@@ -19,6 +19,10 @@ stream = os.getenv('STREAM')
 
 git_diff = get_git_diff()
 
+if not git_diff:
+    print("No git diff found. Exiting.")
+    exit(0)
+
 json_payload = {
     "model": model,
     "prompt": "Generate and show only a concise git commit message written in present tense without return characters for the git diff: {}".format(git_diff),
