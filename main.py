@@ -1,21 +1,27 @@
 import requests
-
 import os
 import subprocess
 import json
+from logzero import logger
+from dotenv import load_dotenv
 
 
 def get_git_diff() -> str:
     diff_output = subprocess.run(['git', 'diff'], capture_output=True, text=True)
     return diff_output.stdout.strip()
 
-from dotenv import load_dotenv
-load_dotenv()
 
-
+# Load environment variables
 model = os.getenv('MODEL_NAME')
 url = os.getenv('ENDPOINT_URL')
 stream = os.getenv('STREAM')
+
+# Load environment variables from .env file if required
+if (not model) or (not url) or (not stream):
+    load_dotenv()
+    model = os.getenv('MODEL_NAME')
+    url = os.getenv('ENDPOINT_URL')
+    stream = os.getenv('STREAM')
 
 git_diff = get_git_diff()
 
@@ -31,4 +37,4 @@ json_payload = {
 
 response = requests.post(url, json=json_payload)
 git_message = json.loads(response.text)['response']
-print(git_message)
+logger.info(git_message)
