@@ -17,9 +17,11 @@ model = os.getenv('MODEL_NAME')
 url = os.getenv('ENDPOINT_URL')
 stream = os.getenv('STREAM')
 
+git_diff = get_git_diff()
+
 json_payload = {
     "model": model,
-    "prompt": "Generate and show only a concise git commit message written in present tense without return characters for the git diff: {}".format(get_git_diff()),
+    "prompt": "Generate and show only a concise git commit message written in present tense without return characters for the git diff: {}".format(git_diff),
     "stream": False,
 }
 
